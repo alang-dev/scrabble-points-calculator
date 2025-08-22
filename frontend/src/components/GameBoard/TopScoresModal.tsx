@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Modal from '../base/Modal';
 import DataTable from '../base/DataTable';
+import Modal from '../base/Modal';
 
 interface ScoreEntry {
   rank: number;
@@ -36,6 +36,7 @@ const TopScoresModal: React.FC<TopScoresModalProps> = ({ isOpen, onClose }) => {
       onClose={onClose}
       title="Top 10 Scores"
       className="max-w-2xl"
+      data-testid="top-scores-modal"
     >
       <div className="space-y-4">
         <p className="text-gray-600 text-sm">
@@ -45,6 +46,7 @@ const TopScoresModal: React.FC<TopScoresModalProps> = ({ isOpen, onClose }) => {
         <DataTable
           columns={columns}
           data={scores}
+          data-testid="top-scores-table"
         />
 
         {scores.length === 0 && (

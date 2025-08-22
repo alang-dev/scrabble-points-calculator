@@ -21,12 +21,14 @@ const Tiles: React.FC<TilesProps> = ({ value, onChange, className, maxLength = 1
         value={value}
         onChange={handleValueChange}
         containerClassName="group flex items-center has-[:disabled]:opacity-30 gap-3"
+        data-testid="tiles-input"
       >
         {Array.from({ length: maxLength }, (_, index) => (
           <InputOTPSlot
             key={index}
             index={index}
             className="h-16 w-16 text-xl font-bold border rounded-lg"
+            data-testid={`tile-${index}`}
           />
         ))}
       </InputOTP>

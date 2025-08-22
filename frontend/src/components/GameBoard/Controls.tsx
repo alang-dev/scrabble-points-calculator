@@ -1,7 +1,7 @@
 import { BarChart3, RotateCcw, Save } from 'lucide-react';
 import React from 'react';
-import { IconButton } from '../base/Button';
 import { cn } from '../../lib/utils';
+import { IconButton } from '../base/Button';
 
 interface ControlsProps {
   onReset: () => void;
@@ -20,13 +20,13 @@ const Controls: React.FC<ControlsProps> = ({
 }) => {
   return (
     <div className={cn("flex justify-center gap-4", className)}>
-      <IconButton variant="outline" icon={RotateCcw} onClick={onReset}>
+      <IconButton variant="outline" icon={RotateCcw} onClick={onReset} data-testid="reset-button">
         Reset
       </IconButton>
-      <IconButton variant="primary" icon={Save} onClick={onSave} disabled={!canSave}>
+      <IconButton variant="primary" icon={Save} onClick={onSave} disabled={!canSave} data-testid="save-button">
         Save Score
       </IconButton>
-      <IconButton variant="secondary" icon={BarChart3} onClick={onViewTopScores}>
+      <IconButton variant="secondary" icon={BarChart3} onClick={onViewTopScores} data-testid="view-top-scores-button">
         View Top Scores
       </IconButton>
     </div>
