@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from '../base/Table';
+import DataTable from '../base/DataTable';
 
 interface ScoreGroups {
   [points: string]: string[];
@@ -37,7 +37,7 @@ const ScoringRulesTable: React.FC<ScoringRulesTableProps> = ({ className, scorin
     <div className={`${className || ''}`}>
       <h3 className="text-lg font-semibold text-gray-700 mb-4 text-center">Scrabble Scoring Rules</h3>
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <Table columns={columns} data={tableData} />
+        <DataTable columns={columns} data={tableData} />
       </div>
       <p className="text-xs text-gray-500 text-center mt-2">
         Each letter has a point value. Calculate your word's total by adding up all letter values.
