@@ -20,7 +20,7 @@
 - `ScoreController` - REST endpoints for score operations
   * `GET    /scores/rules` – Get Scrabble letter scoring rules (A-Z point values)
   * `POST   /scores/compute` – Compute score for letters (`letters`)
-  * `POST   /scores` – Save score (`playerId`, `sessionId`, `word`) - backend recomputes score
+  * `POST   /scores` – Save score (`playerId`, `sessionId`, `letters`) - backend recomputes score
 - `ScoreService` - Business logic for score calculation and management
 - `ScoreRepository` - Data access layer for scores
 

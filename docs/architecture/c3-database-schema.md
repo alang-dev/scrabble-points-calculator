@@ -35,7 +35,7 @@ erDiagram
 - **name**: Randomly generated player display name (e.g., "Player123")
 
 ### scores
-- **word**: The word that was spelled to achieve this score (letters only, A-Z)
+- **word**: The letters that were spelled to achieve this score (letters only, A-Z)
 - **points**: Backend-computed points for this word (never trust frontend)
 - **created_at**: Used for tie-breaking when multiple players have the same score (earliest wins)
 
