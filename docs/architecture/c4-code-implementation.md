@@ -1,23 +1,41 @@
 # C4: Code Implementation
 
-*How are the components implemented in code?* - Wait for question clarification
+*How do the backend service components interact with each other?*
 
-**Component Design: Tiles**
+## Backend Service Layer Class Diagram
+
+```mermaid
+classDiagram
+    class GameSessionService {
+        -gameSessionRepository: GameSessionRepository
+        -playerService: PlayerService
+        +create() GameSessionDTO
+        +getById(sessionId: UUID) GameSession
+    }
+    
+    class PlayerService {
+        -playerRepository: PlayerRepository
+        +create(playerDTO: PlayerDTO) Player
+        +getById(playerId: UUID) Player
+        -generateRandomPlayerName() String
+    }
+    
+    class ScoreService {
+        -scoreRepository: ScoreRepository
+        -playerService: PlayerService
+        -gameSessionService: GameSessionService
+        +getScoringRules() ScoringRulesDTO
+        +computeScore(request: ScoreComputeDTO) ScoreDTO
+        +create(request: ScoreCreateDTO) ScoreDTO
+    }
+    
+    class LeaderboardService {
+        -scoreRepository: ScoreRepository
+        +findTopScores(request: LeaderboardRequestDTO) LeaderboardDTO
+    }
+
+    %% Service Dependencies
+    GameSessionService --> PlayerService
+    ScoreService --> PlayerService
+    ScoreService --> GameSessionService
 ```
-Tiles.tsx
-├── State: letters (string) - All typed letters as single string
-├── Props: onLettersChange(letters) - Callback to parent
-├── Methods:
-│   ├── handleLetterInput(letter) - Append letter to string
-│   ├── handleBackspace() - Remove last character
-│   ├── clearAllTiles() - Reset to empty string
-```
-
-## Implementation Details
-
-This section will be expanded once the questions in `docs/questions.md` are clarified, particularly:
-
-- Tile input approach (Individual input fields vs Global typing)
-- Navigation and interaction patterns
-- State management approach
-- Component lifecycle and event handling

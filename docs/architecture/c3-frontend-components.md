@@ -10,14 +10,12 @@ graph TB
     
     GameBoard[GameBoard]
     TopScoresModal[TopScoresModal]
-    PlayerInfoModal[PlayerInfoModal]
     
     subgraph "Base Components"
         Modal[Modal]
         Button[Button]
         Tile[Tile]
         Table[Table]
-        Input[Input]
     end
     
     ResetButton[ResetButton]
@@ -26,7 +24,6 @@ graph TB
     
     App --> GameBoard
     App --> TopScoresModal
-    App --> PlayerInfoModal
     
     GameBoard --> Tiles
     GameBoard --> ScoreDisplay
@@ -38,8 +35,6 @@ graph TB
     
     TopScoresModal --> Modal
     TopScoresModal --> Table
-    PlayerInfoModal --> Modal
-    PlayerInfoModal --> Input
     ResetButton --> Button
     SaveButton --> Button
     ViewTopScoresButton --> Button
@@ -52,7 +47,6 @@ graph TB
     style Button fill:#f0f0f0
     style Tile fill:#f0f0f0
     style Table fill:#f0f0f0
-    style Input fill:#f0f0f0
 ```
 
 ## Component Structure
@@ -63,10 +57,9 @@ src/
 ├── components/
 │   ├── GameBoard/
 │   │   ├── GameBoard.tsx (Main game area)
-│   │   ├── Tiles.tsx (10 input tiles, uses base/Tile.tsx)
+│   │   ├── Tiles.tsx (10 OTP-style input tiles with auto-focus/navigation, uses base/Tile.tsx)
 │   │   ├── ScoreDisplay.tsx (Shows current calculated score)
-│   │   ├── TopScoresModal.tsx (Leaderboard modal, uses base/Modal.tsx + base/Table.tsx)
-│   │   ├── PlayerInfoModal.tsx (Player info modal, uses base/Modal.tsx + base/Input.tsx)
+│   │   ├── TopScoresModal.tsx (Global leaderboard modal showing top 10 scores, uses base/Modal.tsx + base/Table.tsx)
 │   │   └── Controls/
 │   │       ├── Controls.tsx (Action buttons container)
 │   │       ├── ResetButton.tsx (uses base/Button.tsx)
@@ -75,7 +68,6 @@ src/
 │   └── base/
 │       ├── Modal.tsx (Base modal component for overlays)
 │       ├── Button.tsx (Base button component)
-│       ├── Tile.tsx (Base tile component for individual letter inputs)
-│       ├── Table.tsx (Base table component for displaying data)
-│       └── Input.tsx (Base input field component for forms)
+│       ├── Tile.tsx (Base tile component for individual letter inputs - OTP-style with auto-advance)
+│       └── Table.tsx (Base table component for displaying data)
 ```

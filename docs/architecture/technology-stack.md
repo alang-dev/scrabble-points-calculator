@@ -24,6 +24,5 @@
 - **Playwright 1.48**: Cross-browser testing framework for web applications
 
 ## Development Environment
-- **Nx 20.0**: Monorepo management and build system (Will adopt later)
 - **GitHub Actions**: CI/CD pipeline automation
 - **GitHub**: Source code repository hosting

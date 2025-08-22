@@ -6,25 +6,21 @@
 
 **Base path:** `/api/v1`
 
-### Games
-- `GameController` - REST endpoints for game operations
-  * `POST   /games` – Create a new game session
-  * `GET    /games/{gameId}` – Get details of the game session
-- `GameService` - Business logic for game management  
-- `GameRepository` - Data access layer for games
+### Game Sessions
+- `GameSessionController` - REST endpoints for game session operations
+  * `POST   /game-sessions` – Create a new game session with player (returns sessionId, playerId, playerName)
+- `GameSessionService` - Business logic for game session management  
+- `GameSessionRepository` - Data access layer for game sessions
 
 ### Players
-- `PlayerController` - REST endpoints for player operations
-  * `POST   /players` – Create a new player (random name if not provided)
-  * `GET    /players/{playerId}` – Get details of the player
-  * `PATCH  /players/{playerId}` – Update player info (`name`)
 - `PlayerService` - Business logic for player management
 - `PlayerRepository` - Data access layer for players
 
 ### Scores
 - `ScoreController` - REST endpoints for score operations
-  * `POST   /players/{playerId}/scores/compute` – Compute score for a game (`gameId`, `actions`)
-  * `POST   /players/{playerId}/scores` – Save score for a game (`gameId`, `score`)
+  * `GET    /scores/rules` – Get Scrabble letter scoring rules (A-Z point values)
+  * `POST   /scores/compute` – Compute score for letters (`letters`)
+  * `POST   /scores` – Save score (`playerId`, `sessionId`, `word`) - backend recomputes score
 - `ScoreService` - Business logic for score calculation and management
 - `ScoreRepository` - Data access layer for scores
 
