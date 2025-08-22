@@ -24,6 +24,9 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
+  /* Global test setup */
+  globalSetup: './global-setup.ts',
+
   /* Configure projects for major browsers */
   projects: [
     {

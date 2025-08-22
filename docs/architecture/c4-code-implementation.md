@@ -10,13 +10,13 @@ classDiagram
         -gameSessionRepository: GameSessionRepository
         -playerService: PlayerService
         +create() GameSessionDTO
-        +getById(sessionId: UUID) GameSession
+        +getById(sessionId: String) GameSessionDTO
     }
     
     class PlayerService {
         -playerRepository: PlayerRepository
-        +create(playerDTO: PlayerDTO) Player
-        +getById(playerId: UUID) Player
+        +create(createPlayerDTO: CreatePlayerDTO) PlayerDTO
+        +getById(playerId: String) PlayerDTO
         -generateRandomPlayerName() String
     }
     
