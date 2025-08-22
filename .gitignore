@@ -168,11 +168,13 @@ Thumbs.db
 
 # Docker
 .dockerignore
+postgres_data/
 
 # Playwright
 test-results/
 playwright-report/
 playwright/.cache/
+blob-report/
 
 # Testcontainers
 .testcontainers.properties

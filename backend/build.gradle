@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.diffplug.spotless' version '6.25.0'
+}
+
+group = 'com.scrabble'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot starters
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.5.4'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.5.4'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    // Database
+    runtimeOnly 'org.postgresql:postgresql'
+    
+    // Development tools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    
+    // Utilities
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.5.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.20.3'
+    testImplementation 'org.testcontainers:postgresql:1.20.3'
+    
+    // Test runtime
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    
+    // Enable testcontainers
+    systemProperty 'testcontainers.reuse.enable', 'true'
+    
+    // JVM settings for tests
+    jvmArgs = [
+        '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.util=ALL-UNNAMED'
+    ]
+}
+
+// Spotless configuration for Google Java Format
+spotless {
+    java {
+        googleJavaFormat('1.23.0')
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+
+
+task format {
+    dependsOn 'spotlessApply'
+    group = 'formatting'
+    description = 'Apply code formatting'
+}

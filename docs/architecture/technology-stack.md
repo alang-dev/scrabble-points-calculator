@@ -11,7 +11,7 @@
 
 ## Backend
 - **Spring Boot 3.5.4**: Java framework for REST API
-- **Java 21 LTS**: Programming language and runtime
+- **Java 17 LTS**: Programming language and runtime
 - **Spring Data JPA 3.5.4**: Data persistence layer
 - **PostgreSQL 16.10**: Production-ready relational database
 - **Spring Web 6.1.13**: REST API endpoints
@@ -24,5 +24,6 @@
 - **Playwright 1.48**: Cross-browser testing framework for web applications
 
 ## Development Environment
+- **Docker/Podman**: Container runtime for PostgreSQL database
 - **GitHub Actions**: CI/CD pipeline automation
 - **GitHub**: Source code repository hosting
