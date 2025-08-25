@@ -18,7 +18,8 @@ public class ScoreServiceImpl implements ScoreService {
   private final ScoreRepository scoreRepository;
   private final ScoringRulesService scoringRulesService;
 
-  public ScoreServiceImpl(ScoreRepository scoreRepository, ScoringRulesService scoringRulesService) {
+  public ScoreServiceImpl(
+      ScoreRepository scoreRepository, ScoringRulesService scoringRulesService) {
     this.scoreRepository = scoreRepository;
     this.scoringRulesService = scoringRulesService;
   }
@@ -60,15 +61,17 @@ public class ScoreServiceImpl implements ScoreService {
         .map(
             score ->
                 TopScoreDTO.builder()
+                    .id(score.getId())
                     .rank(rank.getAndIncrement())
                     .score(score.getPoints())
                     .letters(score.getLetters())
+                    .createdAt(score.getCreatedAt())
                     .build())
         .collect(Collectors.toList());
   }
 
   @Override
-  public void delete(UUID id) {
-    scoreRepository.deleteById(id);
+  public void deleteByIds(List<UUID> ids) {
+    scoreRepository.deleteAllById(ids);
   }
 }

@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface ScoringRulesService {
   List<ScoringRuleDTO> getScoringRules();
-  
+
   int computeScore(String letters);
 }

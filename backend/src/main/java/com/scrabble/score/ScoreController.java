@@ -13,7 +13,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,14 +46,17 @@ public class ScoreController {
 
   @GetMapping
   public List<TopScoreDTO> getTopScores(
-      @PageableDefault(size = 10, sort = {"points", "createdAt"}, direction = Sort.Direction.DESC)
-      Pageable pageable) {
+      @PageableDefault(
+              size = 10,
+              sort = {"points", "createdAt"},
+              direction = Sort.Direction.DESC)
+          Pageable pageable) {
     return scoreService.findTopScores(pageable);
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteScore(@PathVariable UUID id) {
-    scoreService.delete(id);
+  public void deleteScores(@RequestBody List<UUID> ids) {
+    scoreService.deleteByIds(ids);
   }
 }

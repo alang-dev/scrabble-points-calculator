@@ -18,5 +18,5 @@ public interface ScoreService {
 
   List<TopScoreDTO> findTopScores(Pageable pageable);
 
-  void delete(UUID id);
+  void deleteByIds(List<UUID> ids);
 }
