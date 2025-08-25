@@ -26,7 +26,7 @@ graph TB
     App --> TopScoresModal
     
     GameBoard --> Tiles
-    GameBoard --> ScoreDisplay
+    GameBoard --> ScoreDisplay  
     GameBoard --> Controls
     
     Controls --> ResetButton
@@ -57,9 +57,9 @@ src/
 ├── components/
 │   ├── GameBoard/
 │   │   ├── GameBoard.tsx (Main game area)
-│   │   ├── Tiles.tsx (10 OTP-style input tiles with auto-focus/navigation, uses base/Tile.tsx)
+│   │   ├── Tiles.tsx (10 empty tiles for letter input with auto-focus/navigation, uses base/Tile.tsx)
 │   │   ├── ScoreDisplay.tsx (Shows current calculated score)
-│   │   ├── TopScoresModal.tsx (Global leaderboard modal showing top 10 scores, uses base/Modal.tsx + base/Table.tsx)
+│   │   ├── TopScoresModal.tsx (Modal showing top 10 scores, uses base/Modal.tsx + base/Table.tsx)
 │   │   └── Controls/
 │   │       ├── Controls.tsx (Action buttons container)
 │   │       ├── ResetButton.tsx (uses base/Button.tsx)
@@ -68,6 +68,6 @@ src/
 │   └── base/
 │       ├── Modal.tsx (Base modal component for overlays)
 │       ├── Button.tsx (Base button component)
-│       ├── Tile.tsx (Base tile component for individual letter inputs - OTP-style with auto-advance)
+│       ├── Tile.tsx (Base tile component for individual letter input with auto-advance)
 │       └── Table.tsx (Base table component for displaying data)
 ```

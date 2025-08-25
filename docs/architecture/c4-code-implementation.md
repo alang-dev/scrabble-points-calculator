@@ -6,36 +6,18 @@
 
 ```mermaid
 classDiagram
-    class GameSessionService {
-        -gameSessionRepository: GameSessionRepository
-        -playerService: PlayerService
-        +create() GameSessionDTO
-        +getById(sessionId: UUID) GameSession
-    }
-    
-    class PlayerService {
-        -playerRepository: PlayerRepository
-        +create(playerDTO: PlayerDTO) Player
-        +getById(playerId: UUID) Player
-        -generateRandomPlayerName() String
-    }
-    
     class ScoreService {
-        -scoreRepository: ScoreRepository
-        -playerService: PlayerService
-        -gameSessionService: GameSessionService
-        +getScoringRules() ScoringRulesDTO
-        +computeScore(request: ScoreComputeDTO) ScoreDTO
+        +getScoringRules() List~ScoringRuleDTO~
+        +computeScore(request: ScoreCreateDTO) ScoreComputeDTO
         +create(request: ScoreCreateDTO) ScoreDTO
-    }
-    
-    class LeaderboardService {
-        -scoreRepository: ScoreRepository
-        +findTopScores(request: LeaderboardRequestDTO) LeaderboardDTO
+        +findTopScores(pageable: Pageable) List~TopScoreDTO~
+        +delete(id: UUID)
     }
 
-    %% Service Dependencies
-    GameSessionService --> PlayerService
-    ScoreService --> PlayerService
-    ScoreService --> GameSessionService
+    class ScoringRulesService {
+        +getScoringRules() List~ScoringRuleDTO~
+        +computeScore(letters: String) int
+    }
+
+    ScoreService --> ScoringRulesService
 ```
