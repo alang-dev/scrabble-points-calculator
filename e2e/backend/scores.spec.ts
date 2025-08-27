@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { SCRABBLE_SCORING_RULES } from '../test-data/scoring-rules';
+import { SCRABBLE_SCORING_RULES, SCORING_TEST_CASES } from '../test-data/scoring-rules';
 import { API_BASE_URL } from '../config/environments';
 
 test.describe('Scores API', () => {
@@ -33,9 +33,20 @@ test.describe('Scores API', () => {
     expect(actualResult).toEqual(expectedResult);
   });
 
-  test('should allow empty letters in compute score', async ({ request }) => {
+  test('should not allow empty letters in compute score', async ({ request }) => {
     const response = await request.post(`${API_BASE_URL}/scores/compute`, {
       data: { letters: '' }
+    });
+
+    expect(response.status()).toBe(400);
+  });
+
+  test('should compute score for alphanumeric string with special characters', async ({ request }) => {
+    const testLetters = '#$3sdkfDSS';
+    const expectedScore = 17; // S(1) + D(2) + K(6) + F(4) + D(2) + S(1) + S(1) = 17
+
+    const response = await request.post(`${API_BASE_URL}/scores/compute`, {
+      data: { letters: testLetters }
     });
 
     expect(response.status()).toBe(200);
@@ -43,21 +54,14 @@ test.describe('Scores API', () => {
     const actualResult = await response.json();
 
     const expectedResult = expect.objectContaining({
-      letters: '',
-      score: 0
+      letters: testLetters,
+      score: expectedScore
     });
 
     expect(actualResult).toEqual(expectedResult);
   });
 
   const createdScoreIds: string[] = [];
-
-  const testScores = [
-    { letters: 'A', expectedPoints: 1 },
-    { letters: 'QUIZ', expectedPoints: 22 },
-    { letters: 'HI', expectedPoints: 5 },
-    { letters: 'TEST', expectedPoints: 4 }
-  ];
 
   test.afterEach(async ({ request }) => {
     // Clean up any scores created in this test
@@ -69,10 +73,10 @@ test.describe('Scores API', () => {
     }
   });
 
-  for (const { letters, expectedPoints } of testScores) {
-    test(`should create score for '${letters}' with ${expectedPoints} points`, async ({ request }) => {
+  for (const { word, expectedPoints } of SCORING_TEST_CASES) {
+    test(`should create score for '${word}' with ${expectedPoints} points`, async ({ request }) => {
       const response = await request.post(`${API_BASE_URL}/scores`, {
-        data: { letters }
+        data: { letters: word }
       });
 
       expect(response.status()).toBe(200);
@@ -82,7 +86,7 @@ test.describe('Scores API', () => {
 
       const expectedScore = expect.objectContaining({
         id: expect.any(String),
-        letters: letters,
+        letters: word,
         points: expectedPoints,
         createdAt: expect.any(String)
       });
