@@ -46,12 +46,3 @@ else
     echo "Error: Neither podman nor docker found. Please install Docker or Podman first."
     exit 1
 fi
-
-echo ""
-echo "Initialization complete!"
-echo ""
-echo "Quick start (recommended):"
-echo "  1. Start database: podman compose up -d postgres"
-echo "  2. Run backend: cd backend && ./gradlew bootRun"
-echo "  3. Run frontend: cd frontend && npm run dev"
-echo "  4. Run e2e tests: cd e2e && npm run test:ui"
