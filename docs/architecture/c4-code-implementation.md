@@ -11,7 +11,7 @@ classDiagram
         +computeScore(request: ScoreCreateDTO) ScoreComputeDTO
         +create(request: ScoreCreateDTO) ScoreDTO
         +findTopScores(pageable: Pageable) List~TopScoreDTO~
-        +delete(id: UUID)
+        +deleteByIds(ids: List~UUID~)
     }
 
     class ScoringRulesService {

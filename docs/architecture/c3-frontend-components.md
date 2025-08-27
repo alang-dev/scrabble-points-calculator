@@ -2,72 +2,40 @@
 
 *What are the key components within the web application?*
 
-## Web Application Components (Frontend)
-
-```mermaid
-graph TB
-    App[App]
-    
-    GameBoard[GameBoard]
-    TopScoresModal[TopScoresModal]
-    
-    subgraph "Base Components"
-        Modal[Modal]
-        Button[Button]
-        Tile[Tile]
-        Table[Table]
-    end
-    
-    ResetButton[ResetButton]
-    SaveButton[SaveButton]
-    ViewTopScoresButton[ViewTopScoresButton]
-    
-    App --> GameBoard
-    App --> TopScoresModal
-    
-    GameBoard --> Tiles
-    GameBoard --> ScoreDisplay  
-    GameBoard --> Controls
-    
-    Controls --> ResetButton
-    Controls --> SaveButton
-    Controls --> ViewTopScoresButton
-    
-    TopScoresModal --> Modal
-    TopScoresModal --> Table
-    ResetButton --> Button
-    SaveButton --> Button
-    ViewTopScoresButton --> Button
-    Tiles --> Tile
-    
-    style App fill:#e8f5e8
-    style GameBoard fill:#e1f5fe
-    style Controls fill:#e1f5fe
-    style Modal fill:#f0f0f0
-    style Button fill:#f0f0f0
-    style Tile fill:#f0f0f0
-    style Table fill:#f0f0f0
-```
 
 ## Component Structure
 
 ```
 src/
-├── App.tsx (Main application container managing global state)
+├── App.tsx (Main application container)
+├── GlobalErrorBanner.tsx (Displays global API errors)
+├── main.tsx (Application entry point)
 ├── components/
 │   ├── GameBoard/
-│   │   ├── GameBoard.tsx (Main game area)
-│   │   ├── Tiles.tsx (10 empty tiles for letter input with auto-focus/navigation, uses base/Tile.tsx)
+│   │   ├── GameBoard.tsx (Main game area, composed of other components)
+│   │   ├── GameBoardContext.tsx (React context for managing game state)
 │   │   ├── ScoreDisplay.tsx (Shows current calculated score)
-│   │   ├── TopScoresModal.tsx (Modal showing top 10 scores, uses base/Modal.tsx + base/Table.tsx)
-│   │   └── Controls/
-│   │       ├── Controls.tsx (Action buttons container)
-│   │       ├── ResetButton.tsx (uses base/Button.tsx)
-│   │       ├── SaveButton.tsx (uses base/Button.tsx)
-│   │       └── ViewTopScoresButton.tsx (uses base/Button.tsx)
-│   └── base/
-│       ├── Modal.tsx (Base modal component for overlays)
-│       ├── Button.tsx (Base button component)
-│       ├── Tile.tsx (Base tile component for individual letter input with auto-advance)
-│       └── Table.tsx (Base table component for displaying data)
+│   │   ├── ScoringRulesTable.tsx (Displays letter values from the API)
+│   │   ├── TopScoresModal.tsx (Modal showing top 10 scores)
+│   │   ├── Controls.tsx (Container for action buttons: Reset, Save, View Top Scores)
+│   │   └── Tiles/
+│   │       ├── index.tsx (Main component for letter input)
+│   │       ├── TilesHeader.tsx
+│   │       ├── TilesInput.tsx (Customized OTP input for tiles)
+│   │       └── TilesFooter.tsx
+│   ├── base/
+│   │   ├── Button.tsx (Base button and icon button components)
+│   │   ├── DataTable.tsx (Renders data in a styled table)
+│   │   ├── Modal.tsx (Base modal component for overlays)
+│   │   ├── Table.tsx (Base HTML-like table components)
+│   │   └── Toast/
+│   │       ├── Toaster.tsx (Displays toast notifications)
+│   │       └── toast.ts (Service to trigger toasts)
+├── hooks/
+│   ├── useScoreCompute.ts (Debounced score calculation)
+│   ├── useScoringRules.ts (Fetches scoring rules)
+│   └── useTopScores.ts (Fetches top scores when modal is open)
+└── lib/
+    ├── api.ts (Axios instance and error handling)
+    └── utils.ts (Utility functions like `cn` and date formatting)
 ```
