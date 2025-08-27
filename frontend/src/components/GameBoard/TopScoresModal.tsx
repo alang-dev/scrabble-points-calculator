@@ -1,13 +1,12 @@
-import React from 'react';
-import { formatDateTime } from '../../lib/utils';
-import { useTopScores } from '../../hooks/useTopScores';
-import DataTable from '../base/DataTable';
-import Modal from '../base/Modal';
-
+import React from 'react'
+import { formatDateTime } from '../../lib/utils'
+import { useTopScores } from '../../hooks/useTopScores'
+import DataTable from '../base/DataTable'
+import Modal from '../base/Modal'
 
 interface TopScoresModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
 }
 
 const columns = [
@@ -18,13 +17,12 @@ const columns = [
     key: 'createdAt',
     label: 'Saved At',
     align: 'right' as const,
-    render: (value: string) => formatDateTime(value)
+    render: (value: unknown) => formatDateTime(value as string),
   },
-];
+]
 
 const TopScoresModal: React.FC<TopScoresModalProps> = ({ isOpen, onClose }) => {
-  const { scores, isLoading } = useTopScores(isOpen);
-
+  const { scores, isLoading } = useTopScores(isOpen)
 
   return (
     <Modal
@@ -47,20 +45,14 @@ const TopScoresModal: React.FC<TopScoresModalProps> = ({ isOpen, onClose }) => {
         ) : scores.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-500">No scores recorded yet.</p>
-            <p className="text-sm text-gray-400 mt-2">
-              Be the first to save a score!
-            </p>
+            <p className="text-sm text-gray-400 mt-2">Be the first to save a score!</p>
           </div>
         ) : (
-          <DataTable
-            columns={columns}
-            data={scores}
-            data-testid="top-scores-table"
-          />
+          <DataTable columns={columns} data={scores} data-testid="top-scores-table" />
         )}
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default TopScoresModal;
+export default TopScoresModal

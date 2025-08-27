@@ -1,6 +1,6 @@
-import GameBoard from './components/GameBoard/GameBoard';
-import GlobalErrorBanner from './GlobalErrorBanner';
-import { Toaster } from './components/base/Toast/Toaster';
+import GameBoard from './components/GameBoard/GameBoard'
+import GlobalErrorBanner from './GlobalErrorBanner'
+import { Toaster } from './components/base/Toast/Toaster'
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
 
       <Toaster />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

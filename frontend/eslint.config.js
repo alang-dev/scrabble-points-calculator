@@ -11,7 +11,7 @@ export default tseslint.config([
     ignores: ['dist', 'node_modules']
   },
   {
-    files: ['**/*.{ts,tsx,js,jsx}'],
+    files: ['src/**/*.{ts,tsx,js,jsx}'],
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,

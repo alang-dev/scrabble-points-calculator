@@ -1,27 +1,27 @@
-import { AlertCircle, X } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { setGlobalErrorHandler } from './lib/api';
+import { AlertCircle, X } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { setGlobalErrorHandler } from './lib/api'
 
 const GlobalErrorBanner: React.FC = () => {
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null)
 
   // Set up global error handler on mount
   useEffect(() => {
     setGlobalErrorHandler((message: string) => {
-      setError(message);
+      setError(message)
       // Auto-hide error after 5 seconds
-      setTimeout(() => setError(null), 5000);
-    });
-  }, []);
+      setTimeout(() => setError(null), 5000)
+    })
+  }, [])
 
   const handleDismiss = () => {
-    setError(null);
-  };
+    setError(null)
+  }
 
-  if (!error) return null;
+  if (!error) return null
 
   return (
-    <div 
+    <div
       data-testid="error-banner"
       className="max-w-4xl mx-auto mb-4 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center justify-between"
     >
@@ -37,7 +37,7 @@ const GlobalErrorBanner: React.FC = () => {
         <X className="w-4 h-4" />
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default GlobalErrorBanner;
+export default GlobalErrorBanner

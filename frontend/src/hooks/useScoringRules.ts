@@ -1,35 +1,36 @@
-import { useEffect, useState } from 'react';
-import api from '../lib/api';
+import { useEffect, useState } from 'react'
+import api from '../lib/api'
 
 interface ScoringRule {
-  points: number;
-  letters: string;
+  points: number
+  letters: string
 }
 
-type ScoringRules = ScoringRule[];
+type ScoringRules = ScoringRule[]
 
 export const useScoringRules = () => {
   const [data, setData] = useState<{ rules: ScoringRules; pattern: string }>({
     rules: [],
-    pattern: ''
-  });
-  const [loading, setLoading] = useState(true);
+    pattern: '',
+  })
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(true)
 
-    api.get('/scores/rules')
+    api
+      .get('/scores/rules')
       .then(response => {
-        const rules: ScoringRules = response.data;
-        const letters = rules.map(rule => rule.letters).join('');
-        const pattern = `^[${letters}${letters.toLowerCase()}]+$`;
+        const rules: ScoringRules = response.data
+        const letters = rules.map(rule => rule.letters).join('')
+        const pattern = `^[${letters}${letters.toLowerCase()}]+$`
 
-        setData({ rules, pattern });
+        setData({ rules, pattern })
       })
       .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+        setLoading(false)
+      })
+  }, [])
 
-  return { scoringRules: data.rules, loading, pattern: data.pattern };
-};
+  return { scoringRules: data.rules, loading, pattern: data.pattern }
+}

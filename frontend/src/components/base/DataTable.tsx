@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   Table,
   TableHeader,
@@ -7,32 +7,34 @@ import {
   TableHead,
   TableCell,
   TableCaption,
-} from './Table';
+} from './Table'
 
 interface Column {
-  key: string;
-  label: string;
-  align?: 'left' | 'center' | 'right';
-  render?: (value: any) => string;
+  key: string
+  label: string
+  align?: 'left' | 'center' | 'right'
+  render?: (value: unknown) => React.ReactNode
 }
 
 interface DataTableProps {
-  columns: Column[];
-  data: Record<string, any>[];
-  className?: string;
-  'data-testid'?: string;
+  columns: Column[]
+  data: Record<string, unknown>[]
+  className?: string
+  'data-testid'?: string
 }
 
-const DataTable: React.FC<DataTableProps> = ({ columns, data, className, 'data-testid': dataTestId }) => {
+const DataTable: React.FC<DataTableProps> = ({
+  columns,
+  data,
+  className,
+  'data-testid': dataTestId,
+}) => {
   return (
     <Table className={className} data-testid={dataTestId}>
       <TableHeader>
         <TableRow>
-          {columns.map((column) => (
-            <TableHead
-              key={column.key}
-              align={column.align}
-            >
+          {columns.map(column => (
+            <TableHead key={column.key} align={column.align}>
               {column.label}
             </TableHead>
           ))}
@@ -41,22 +43,17 @@ const DataTable: React.FC<DataTableProps> = ({ columns, data, className, 'data-t
       <TableBody>
         {data.map((row, index) => (
           <TableRow key={index}>
-            {columns.map((column) => (
-              <TableCell
-                key={column.key}
-                align={column.align}
-              >
-                {column.render ? column.render(row[column.key]) : row[column.key]}
+            {columns.map(column => (
+              <TableCell key={column.key} align={column.align}>
+                {column.render ? column.render(row[column.key]) : String(row[column.key] ?? '')}
               </TableCell>
             ))}
           </TableRow>
         ))}
       </TableBody>
-      {data.length === 0 && (
-        <TableCaption>No data available</TableCaption>
-      )}
+      {data.length === 0 && <TableCaption>No data available</TableCaption>}
     </Table>
-  );
-};
+  )
+}
 
-export default DataTable;
+export default DataTable

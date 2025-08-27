@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -e
+
+echo "Running pre-commit checks..."
+
+# Check if we have staged files for each component
+FRONTEND_STAGED=$(git diff --cached --name-only | grep "^frontend/" | wc -l)
+BACKEND_STAGED=$(git diff --cached --name-only | grep "^backend/" | wc -l)
+
+# Run frontend checks if frontend files are staged
+if [ "$FRONTEND_STAGED" -gt 0 ]; then
+    echo "Checking frontend code style..."
+    cd frontend
+    
+    if ! npm run lint; then
+        echo "ESLint check failed. Please fix the issues before committing."
+        exit 1
+    fi
+    
+    echo "Frontend ESLint check passed"
+    cd ..
+fi
+
+# Run backend checks if backend files are staged
+if [ "$BACKEND_STAGED" -gt 0 ]; then
+    echo "Checking backend code style..."
+    cd backend
+    
+    if ! ./gradlew spotlessCheck; then
+        echo "Spotless check failed. Run './gradlew spotlessApply' to fix formatting issues."
+        exit 1
+    fi
+    
+    echo "Backend Spotless check passed"
+    cd ..
+fi
+
+# If no frontend or backend files are staged, skip checks
+if [ "$FRONTEND_STAGED" -eq 0 ] && [ "$BACKEND_STAGED" -eq 0 ]; then
+    echo "No frontend or backend files staged, skipping code style checks"
+fi
+
+echo "All pre-commit checks passed!"
