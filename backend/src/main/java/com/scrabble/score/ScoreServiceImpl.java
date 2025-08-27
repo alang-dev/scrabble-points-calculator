@@ -5,15 +5,19 @@ import com.scrabble.score.dto.ScoreCreateDTO;
 import com.scrabble.score.dto.ScoreDTO;
 import com.scrabble.score.dto.ScoringRuleDTO;
 import com.scrabble.score.dto.TopScoreDTO;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ScoreServiceImpl implements ScoreService {
+
+  private static final Set<String> ALLOWED_SORT_FIELDS = Set.of("points", "createdAt");
+  private static final int MAX_PAGE_SIZE = 100;
 
   private final ScoreRepository scoreRepository;
   private final ScoringRulesService scoringRulesService;
@@ -54,20 +58,33 @@ public class ScoreServiceImpl implements ScoreService {
 
   @Override
   public List<TopScoreDTO> findTopScores(Pageable pageable) {
+    for (Sort.Order order : pageable.getSort()) {
+      if (!ALLOWED_SORT_FIELDS.contains(order.getProperty())) {
+        throw new IllegalArgumentException(
+            String.format("Invalid sort field: %s.", order.getProperty()));
+      }
+    }
+
+    if (pageable.getPageSize() > MAX_PAGE_SIZE) {
+      throw new IllegalArgumentException(
+          String.format("Page size cannot exceed %d.", MAX_PAGE_SIZE, pageable.getPageSize()));
+    }
+
     List<Score> topScores = scoreRepository.findAll(pageable).getContent();
 
-    AtomicInteger rank = new AtomicInteger(1);
-    return topScores.stream()
-        .map(
-            score ->
-                TopScoreDTO.builder()
-                    .id(score.getId())
-                    .rank(rank.getAndIncrement())
-                    .score(score.getPoints())
-                    .letters(score.getLetters())
-                    .createdAt(score.getCreatedAt())
-                    .build())
-        .collect(Collectors.toList());
+    List<TopScoreDTO> result = new ArrayList<>();
+    for (int i = 0; i < topScores.size(); i++) {
+      Score score = topScores.get(i);
+      result.add(
+          TopScoreDTO.builder()
+              .id(score.getId())
+              .rank(i + 1)
+              .score(score.getPoints())
+              .letters(score.getLetters())
+              .createdAt(score.getCreatedAt())
+              .build());
+    }
+    return result;
   }
 
   @Override

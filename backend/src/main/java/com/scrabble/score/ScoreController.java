@@ -5,6 +5,7 @@ import com.scrabble.score.dto.ScoreCreateDTO;
 import com.scrabble.score.dto.ScoreDTO;
 import com.scrabble.score.dto.ScoringRuleDTO;
 import com.scrabble.score.dto.TopScoreDTO;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Pageable;
@@ -35,12 +36,12 @@ public class ScoreController {
   }
 
   @PostMapping("/compute")
-  public ScoreComputeDTO computeScore(@RequestBody ScoreCreateDTO request) {
+  public ScoreComputeDTO computeScore(@Valid @RequestBody ScoreCreateDTO request) {
     return scoreService.computeScore(request);
   }
 
   @PostMapping
-  public ScoreDTO create(@RequestBody ScoreCreateDTO request) {
+  public ScoreDTO create(@Valid @RequestBody ScoreCreateDTO request) {
     return scoreService.create(request);
   }
 
