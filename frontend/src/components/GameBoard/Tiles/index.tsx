@@ -5,7 +5,7 @@ import TilesInput from './TilesInput';
 
 
 const Tiles: React.FC = () => {
-  const { pattern, setOriginalTiles, originalTiles } = useGameBoard()
+  const { isScoreSaving, pattern, setOriginalTiles, originalTiles } = useGameBoard()
   return (
     <div className='space-y-4'>
       <TilesHeader />
@@ -14,6 +14,7 @@ const Tiles: React.FC = () => {
         value={originalTiles}
         onChange={setOriginalTiles}
         autoCapitalize='on'
+        autoFocus={!isScoreSaving}
         pattern={pattern} />
       <TilesFooter />
     </div>

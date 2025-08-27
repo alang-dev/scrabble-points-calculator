@@ -1,11 +1,17 @@
-import { type APIRequestContext, type Page } from '@playwright/test';
+import { expect, type APIRequestContext, type Locator, type Page } from '@playwright/test';
 import { API_BASE_URL } from '../config/environments';
 
 export class BasePage {
   readonly page: Page;
+  readonly toast: Locator;
+  readonly errorBanner: Locator;
+  readonly errorDismissButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.toast = page.locator('[data-sonner-toast]');
+    this.errorBanner = page.locator('[data-testid="error-banner"]');
+    this.errorDismissButton = this.errorBanner.locator('button[aria-label="Dismiss error"]');
   }
 
   async goto() {
@@ -43,5 +49,41 @@ export class BasePage {
         data: scoreIds
       });
     }
+  }
+
+  async verifyToastMessage(expectedMessage: string) {
+    await expect(this.toast).toBeVisible();
+    await expect(this.toast).toContainText(expectedMessage);
+  }
+
+  async verifyToastVisible() {
+    await expect(this.toast).toBeVisible();
+  }
+
+  async verifyToastNotVisible() {
+    await expect(this.toast).not.toBeVisible();
+  }
+
+  async verifyErrorBannerVisible() {
+    await expect(this.errorBanner).toBeVisible();
+  }
+
+  async verifyErrorBannerNotVisible() {
+    await expect(this.errorBanner).not.toBeVisible();
+  }
+
+  async verifyErrorBannerMessage(expectedMessage: string) {
+    await expect(this.errorBanner).toBeVisible();
+    await expect(this.errorBanner).toContainText(expectedMessage);
+  }
+
+  async dismissErrorBanner() {
+    await expect(this.errorDismissButton).toBeVisible();
+    await this.errorDismissButton.click();
+  }
+
+  async waitForApiCall(timeout: number = 1000) {
+    // Wait for debounce (300ms) + API call time
+    await this.page.waitForTimeout(timeout);
   }
 }

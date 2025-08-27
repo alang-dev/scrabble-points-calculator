@@ -1,5 +1,5 @@
 import { OTPInput, type OTPInputProps, type SlotProps } from 'input-otp';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { cn } from '../../../lib/utils';
 
 interface TilesInputBaseProps {
@@ -31,14 +31,23 @@ const TileSlot: React.FC<TileSlotProps> = ({ char, isActive, autoCapitalize = tr
 type TilesInputProps = TilesInputBaseProps & Partial<OTPInputProps> & {
   maxLength: number
 }
+
 const TilesInput: React.FC<TilesInputProps> = (props) => {
-  const { className, children, autoCapitalize, 'data-testid': dataTestId = "tiles-input", ...restProps } = props
+  const { className, children, autoCapitalize, autoFocus, 'data-testid': dataTestId = "tiles-input", ...restProps } = props
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current && autoFocus) {
+      inputRef.current.focus();
+    }
+  }, [autoFocus]);
 
   return (
     <div className={cn('flex justify-center', className)}>
       <OTPInput
         {...restProps}
-        autoFocus={true}
+        ref={inputRef}
+        autoFocus={autoFocus}
         inputMode="text"
         containerClassName={cn(
           "flex items-center gap-3 has-[:disabled]:opacity-50",

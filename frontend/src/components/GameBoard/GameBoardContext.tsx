@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useRef, useState } from 'react';
 import { useScoreCompute } from '../../hooks/useScoreCompute';
 import { useScoringRules } from '../../hooks/useScoringRules';
 import api from '../../lib/api';
@@ -15,7 +15,8 @@ interface GameBoardContextType {
   originalTiles: string;
   setOriginalTiles: (tiles: string) => void;
 
-  isScoreLoading: boolean;
+  isScoreComputing: boolean;
+  isScoreSaving: boolean;
   scoreValue: string | number
 
   pattern?: string;
@@ -44,9 +45,10 @@ export const GameBoardProvider: React.FC<GameBoardProviderProps> = ({ children }
   // Original tiles from OTP input - must not be modified as it has side effects
   // when modifying middle letters, the auto advance to next letter won't work
   const [originalTiles, setOriginalTilesState] = useState('');
+  const [isScoreSaving, setIsScoreSaving] = useState(false);
 
   const { pattern, scoringRules = [] } = useScoringRules();
-  const { isLoading: isScoreLoading, computedScore } = useScoreCompute(originalTiles);
+  const { isLoading: isScoreComputing, computedScore } = useScoreCompute(originalTiles);
 
 
   const setOriginalTiles = (newTiles: string) => {
@@ -68,6 +70,7 @@ export const GameBoardProvider: React.FC<GameBoardProviderProps> = ({ children }
       return;
     }
 
+    setIsScoreSaving(true);
     const letters = originalTiles.toUpperCase()
     api.post('/scores', {
       letters: letters
@@ -75,6 +78,10 @@ export const GameBoardProvider: React.FC<GameBoardProviderProps> = ({ children }
       .then((response) => {
         const { letters, points } = response.data
         toast.success(`Tiles "${letters}" that scored ${points} points have been saved.`);
+        clearTiles();
+      })
+      .finally(() => {
+        setIsScoreSaving(false);
       });
   };
 
@@ -83,7 +90,8 @@ export const GameBoardProvider: React.FC<GameBoardProviderProps> = ({ children }
     originalTiles,
     setOriginalTiles,
 
-    isScoreLoading,
+    isScoreComputing,
+    isScoreSaving,
     scoreValue: computedScore?.score ?? '--',
     pattern,
     scoringRules,

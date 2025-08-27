@@ -90,7 +90,6 @@ test.describe.serial('Top Scores Table Display', () => {
         savedAt: score.createdAt.slice(0, 19),
       }));
 
-    console.table(top10ExpectedScores);
 
     await topScoresPage.verifyTableData(top10ExpectedScores);
   });

@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { Score } from '../models/Score';
 import { ScrabblePointsCalculatorPage } from '../pages/ScrabblePointsCalculatorPage';
 import { SCORING_TEST_CASES } from '../test-data/scoring-rules';
+import { API_BASE_URL } from '../config/environments';
 
 test.describe('Tiles Input and Point Calculation', () => {
   let calculatorPage: ScrabblePointsCalculatorPage;
@@ -48,45 +49,27 @@ test.describe('Tiles Input and Point Calculation', () => {
   });
 
   test('should auto-advance to next position when editing middle letter', async ({ page }) => {
-    // FAILING TEST CASE - Documents expected behavior that needs to be implemented
-    // Expected: When editing a letter in the middle, it should REPLACE the letter and move cursor to next position
-    // Current: It INSERTS the letter and shifts remaining letters to the right
-
-    // First, input a word
     await calculatorPage.inputLetters('HELLO');
 
-    // Use keyboard navigation to move to middle position (position 2)
-    const tilesInput = page.locator('[data-testid="tiles-input"]');
-    await tilesInput.click();
+    // Verify initial score for HELLO: H(4) + E(1) + L(1) + L(1) + O(1) = 8
+    await calculatorPage.verifyScore(8);
 
-    // Move cursor to position 2 (middle 'L')
-    await page.keyboard.press('Home'); // Go to start
-    await page.keyboard.press('ArrowRight'); // Position 1
-    await page.keyboard.press('ArrowRight'); // Position 2
+    await page.keyboard.press('ArrowLeft');
+    await page.keyboard.press('ArrowLeft');
+    await page.waitForTimeout(200);
 
-    // Type a new letter - this should replace the current letter and advance cursor
     await page.keyboard.type('X');
 
-    const tileSlots = page.locator('[data-testid^="tile-"]');
+    const finalText = await calculatorPage.getTilesText();
+    expect(finalText).toBe('HELXO');
 
-    // EXPECTED BEHAVIOR (currently failing):
-    // Should result in 'HEXLO' - X replaces the L at position 2, cursor moves to position 3
-    // await expect(tileSlots.nth(0)).toContainText('H');
-    // await expect(tileSlots.nth(1)).toContainText('E');
-    // await expect(tileSlots.nth(2)).toContainText('X');
-    // await expect(tileSlots.nth(3)).toContainText('L');
-    // await expect(tileSlots.nth(4)).toContainText('O');
+    await page.waitForResponse('**/api/v1/scores/compute');
 
-    // CURRENT BEHAVIOR (what actually happens):
-    // Results in 'HEXLLO' - X is inserted at position 2, remaining letters shift right
-    const currentText = await calculatorPage.getTilesText();
-    expect(currentText).toBe('HEXLLO'); // Documents current (incorrect) behavior
+    // Verify updated score for HELXO: H(4) + E(1) + L(1) + X(8) + O(1) = 15
+    await calculatorPage.verifyScore(15);
   });
 
   test('should completely clear tiles and reset score when Reset Tiles button is clicked', async ({ page }) => {
-    // Listen for console messages
-    page.on('console', msg => console.log('BROWSER:', msg.text()));
-    
     await calculatorPage.inputLetters('TEST');
     await calculatorPage.verifyScoreIsPositive();
 
@@ -94,7 +77,7 @@ test.describe('Tiles Input and Point Calculation', () => {
     expect(tilesBeforeReset).toBe('TEST');
 
     await calculatorPage.clickReset();
-    
+
     // Wait a bit for the reset to process
     await page.waitForTimeout(500);
 
@@ -136,7 +119,7 @@ test.describe('Score Saving Functionality', () => {
     await calculatorPage.verifySaveButtonEnabled();
   });
 
-  test('should save score to backend when save button is clicked', async ({ request }) => {
+  test('should save score to backend and show success feedback when save button is clicked', async ({ request }) => {
     const expectedScore: Score = {
       id: '',
       letters: 'QUIZ',
@@ -148,7 +131,13 @@ test.describe('Score Saving Functionality', () => {
 
     const savedScoreId = await calculatorPage.clickSave();
     expectedScore.id = savedScoreId || ''
+
     await calculatorPage.verifySavedScore(request, expectedScore);
+
+    await calculatorPage.verifyToastMessage('Tiles "QUIZ" that scored 22 points have been saved.');
+    await calculatorPage.verifyTilesCleared();
+    await calculatorPage.verifyScoreIsEmpty();
+    await calculatorPage.verifyTilesInputFocused();
   });
 
 });

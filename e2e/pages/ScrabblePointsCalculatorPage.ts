@@ -137,4 +137,14 @@ export class ScrabblePointsCalculatorPage extends BasePage {
     const inputValue = await this.tilesInput.inputValue();
     return inputValue;
   }
+
+
+  async verifyTilesCleared() {
+    const inputValue = await this.tilesInput.inputValue();
+    expect(inputValue).toBe('');
+  }
+
+  async verifyTilesInputFocused() {
+    await expect(this.tilesInput).toBeFocused();
+  }
 }
