@@ -1,40 +1,38 @@
-const js = require('@eslint/js');
-const tsParser = require('@typescript-eslint/parser');
-const tsPlugin = require('@typescript-eslint/eslint-plugin');
-const prettier = require('eslint-config-prettier');
-const prettierPlugin = require('eslint-plugin-prettier');
+import js from '@eslint/js'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
+import prettier from 'eslint-config-prettier'
+import prettierPlugin from 'eslint-plugin-prettier'
 
-module.exports = [
+export default tseslint.config([
   {
-    ignores: ['node_modules', 'test-results', 'playwright-report']
+    ignores: ['node_modules', 'test-results', 'playwright-report'],
   },
   {
-    files: ['**/*.{ts,js}'],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: 2022,
-        sourceType: 'module'
-      },
-      globals: {
-        console: 'readonly',
-        process: 'readonly'
-      }
-    },
+    files: ['**/*.{ts,tsx,js,jsx}'],
+    extends: [js.configs.recommended, ...tseslint.configs.recommended, prettier],
     plugins: {
-      '@typescript-eslint': tsPlugin,
-      'prettier': prettierPlugin
+      prettier: prettierPlugin,
+    },
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+      parser: tseslint.parser,
+      parserOptions: {
+        sourceType: 'module',
+      },
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...tsPlugin.configs.recommended.rules,
-      ...prettier.rules,
       'prettier/prettier': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       'prefer-const': 'error',
-      'no-var': 'error'
-    }
-  }
-];
+      'no-var': 'error',
+    },
+  },
+])
