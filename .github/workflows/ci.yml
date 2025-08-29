@@ -77,11 +77,25 @@ jobs:
           cp .github/templates/coverage-index.html coverage/index.html
           cp -r .github/templates/assets coverage/
       
-      # Deploy coverage reports to GitHub Pages (only on master)
-      - name: Deploy coverage reports to GitHub Pages
+      # Upload coverage reports as artifact for GitHub Pages
+      - name: Upload coverage reports
         if: github.ref == 'refs/heads/master'
-        uses: peaceiris/actions-gh-pages@v3
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./coverage
-          destination_dir: coverage
+          path: ./coverage
+  
+  # Deploy to GitHub Pages
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    needs: test-and-coverage
+    runs-on: ubuntu-22.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -60,6 +60,6 @@ tell application \"Terminal\"
 end tell
 "
 
-echo "Backend and frontend started in separate terminals"
+echo "Backend and frontend started in separate terminals. Pls check the terminal to make sure they are working."
 echo "Backend: http://localhost:$BACKEND_PORT"
 echo "Frontend: http://localhost:$FRONTEND_PORT"
