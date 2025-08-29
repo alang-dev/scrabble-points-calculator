@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrabble Points Calculator - Test Reports</title>
+  <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="./assets/css/coverage-reports.css" rel="stylesheet">
+  <script src="./assets/js/bootstrap.bundle.min.js"></script>
+  <script src="./assets/js/chart.min.js"></script>
+  <script src="./assets/js/papaparse.min.js"></script>
+  <script src="./assets/js/coverage-reports.js"></script>
+</head>
+
+<body class="py-4">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <div class="bg-white rounded-3 shadow-sm border p-4">
+          <h1 class="text-center mb-2">Test Reports</h1>
+          <p class="text-center text-muted mb-4">Scrabble Points Calculator</p>
+
+          <!-- E2E Test Results Section -->
+          <div class="card mb-4">
+            <div class="card-header" id="e2eHeader">
+              <h2 class="h4 mb-0">
+                <button class="btn btn-link text-decoration-none p-0 w-100 text-start" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#e2eCollapse" aria-expanded="true"
+                  aria-controls="e2eCollapse">
+                  E2E Test Results
+                  <i class="float-end">▼</i>
+                </button>
+              </h2>
+            </div>
+            <div id="e2eCollapse" class="collapse show" aria-labelledby="e2eHeader">
+              <div class="card-body">
+                <div class="text-center">
+                  <a href="./e2e/index.html" class="btn btn-success btn-lg" target="_blank">
+                    View E2E Test Results (Playwright)
+                  </a>
+                  <p class="text-muted mt-2 mb-0">End-to-end testing results with detailed browser automation reports</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Backend Coverage Section -->
+          <div class="card mb-4">
+            <div class="card-header" id="backendHeader">
+              <h2 class="h4 mb-0">
+                <button class="btn btn-link text-decoration-none p-0 w-100 text-start" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#backendCollapse" aria-expanded="true"
+                  aria-controls="backendCollapse">
+                  Backend Coverage
+                  <i class="float-end">▼</i>
+                </button>
+              </h2>
+            </div>
+            <div id="backendCollapse" class="collapse show" aria-labelledby="backendHeader">
+              <div class="card-body">
+                <div id="backend-loading" class="text-center text-muted py-4">Loading backend coverage data...</div>
+                <div id="backend-error" class="text-center text-danger py-4 d-none"></div>
+                <div id="backend-content" class="d-none">
+                  <div class="chart-container">
+                    <canvas id="backendChart"></canvas>
+                  </div>
+                  <div class="table-responsive mt-3">
+                    <table id="backendTable" class="table table-sm table-striped">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Package/Class</th>
+                          <th>Line Coverage</th>
+                          <th>Branch Coverage</th>
+                          <th>Method Coverage</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Frontend Coverage Section -->
+          <div class="card mb-4">
+            <div class="card-header" id="frontendHeader">
+              <h2 class="h4 mb-0">
+                <button class="btn btn-link text-decoration-none p-0 w-100 text-start" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#frontendCollapse" aria-expanded="true"
+                  aria-controls="frontendCollapse">
+                  Frontend Coverage
+                  <i class="float-end">▼</i>
+                </button>
+              </h2>
+            </div>
+            <div id="frontendCollapse" class="collapse show" aria-labelledby="frontendHeader">
+              <div class="card-body">
+                <div id="frontend-loading" class="text-center text-muted py-4">Loading frontend coverage data...</div>
+                <div id="frontend-error" class="text-center text-danger py-4 d-none"></div>
+                <div id="frontend-content" class="d-none">
+                  <div class="chart-container">
+                    <canvas id="frontendChart"></canvas>
+                  </div>
+                  <div class="table-responsive mt-3">
+                    <table id="frontendTable" class="table table-sm table-striped">
+                      <thead class="table-light">
+                        <tr>
+                          <th>File Path</th>
+                          <th>Lines</th>
+                          <th>Functions</th>
+                          <th>Branches</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="text-center mt-5 pt-4 border-top">
+            <small class="text-muted">Generated automatically by GitHub Actions</script></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
