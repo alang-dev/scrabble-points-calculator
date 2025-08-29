@@ -7,49 +7,81 @@ on:
     branches: [ master ]
 
 jobs:
-  backend-test:
+  test-and-coverage:
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout master
+      - name: Checkout code
         uses: actions/checkout@v4
       
+      # Set up environments in parallel preparation
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
       
-      - name: Grant execute permission for gradlew
-        run: chmod +x backend/gradlew
-      
-      - name: Run backend tests
-        run: |
-          cd backend
-          ./gradlew test
-      
-      - name: Build backend JAR
-        run: |
-          cd backend
-          ./gradlew build
-
-  frontend-test:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout master
-        uses: actions/checkout@v4
-      
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
       
-      - name: Install frontend dependencies and run tests
+      # Cache Gradle dependencies
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            backend/.gradle
+          key: gradle-${{ runner.os }}-${{ hashFiles('backend/**/*.gradle*', 'backend/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+      
+      # Install frontend dependencies
+      - name: Install frontend dependencies
         run: |
           cd frontend
           npm ci
-          npm run test:run
+      
+      # Run backend tests with coverage
+      - name: Run backend tests with coverage
+        run: |
+          cd backend
+          chmod +x gradlew
+          mkdir -p ../coverage/backend
+          ./gradlew test jacocoTestReport --parallel
+      
+      # Run frontend tests with coverage
+      - name: Run frontend tests with coverage
+        run: |
+          cd frontend
+          npm run test:coverage
+      
+      # Build both applications
+      - name: Build backend JAR
+        run: |
+          cd backend
+          ./gradlew build --parallel
       
       - name: Build frontend dist
         run: |
           cd frontend
           npm run build
+      
+      # Prepare coverage reports for GitHub Pages
+      - name: Prepare coverage reports
+        run: |
+          # Copy template files to coverage directory
+          cp .github/templates/coverage-index.html coverage/index.html
+          cp -r .github/templates/assets coverage/
+      
+      # Deploy coverage reports to GitHub Pages (only on master)
+      - name: Deploy coverage reports to GitHub Pages
+        if: github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./coverage
+          destination_dir: coverage
