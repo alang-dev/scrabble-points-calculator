@@ -1,9 +1,7 @@
-import { renderHook, act } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
 import { vi } from 'vitest'
-import api from '../lib/api'
+import { mockApiPost } from '../test/apiMocks'
 import { useScoreCompute } from './useScoreCompute'
-
-vi.mock('../lib/api')
 
 describe('useScoreCompute', () => {
   beforeEach(() => {
@@ -18,19 +16,19 @@ describe('useScoreCompute', () => {
   it('should call api with uppercase tiles after debounce', async () => {
     const tiles = 'hello'
     const scoreResult = { letters: 'HELLO', score: 8 }
-    vi.mocked(api.post).mockResolvedValue({ data: scoreResult })
+    mockApiPost.mockResolvedValue({ data: scoreResult })
 
     const { result } = renderHook(() => useScoreCompute(tiles, 500))
 
     expect(result.current.isLoading).toBe(true)
-    expect(api.post).not.toHaveBeenCalled()
+    expect(mockApiPost).not.toHaveBeenCalled()
 
     await act(async () => {
       vi.advanceTimersByTime(500)
     })
 
     await vi.waitFor(() => {
-      expect(api.post).toHaveBeenCalledWith('/scores/compute', { letters: 'HELLO' })
+      expect(mockApiPost).toHaveBeenCalledWith('/scores/compute', { letters: 'HELLO' })
     })
 
     await vi.waitFor(() => {
@@ -47,12 +45,12 @@ describe('useScoreCompute', () => {
 
   it('should not call api when tiles are empty', () => {
     renderHook(() => useScoreCompute(''))
-    expect(api.post).not.toHaveBeenCalled()
+    expect(mockApiPost).not.toHaveBeenCalled()
   })
 
   it('should reset state on api error', async () => {
     const tiles = 'error'
-    vi.mocked(api.post).mockRejectedValue(new Error('API Error'))
+    mockApiPost.mockRejectedValue(new Error('API Error'))
 
     const { result } = renderHook(() => useScoreCompute(tiles, 500))
 
@@ -71,7 +69,7 @@ describe('useScoreCompute', () => {
 
   it('should handle rapid changes in tiles value', async () => {
     const scoreResult = { letters: 'WORLD', score: 9 }
-    vi.mocked(api.post).mockResolvedValue({ data: scoreResult })
+    mockApiPost.mockResolvedValue({ data: scoreResult })
 
     const { result, rerender } = renderHook(({ tiles }) => useScoreCompute(tiles, 500), {
       initialProps: { tiles: 'wor' },
@@ -84,14 +82,14 @@ describe('useScoreCompute', () => {
       vi.advanceTimersByTime(300) // Not enough time for the first call
     })
 
-    expect(api.post).not.toHaveBeenCalled()
+    expect(mockApiPost).not.toHaveBeenCalled()
 
     await act(async () => {
       vi.advanceTimersByTime(200) // Enough time for the second call
     })
 
     await vi.waitFor(() => {
-      expect(api.post).toHaveBeenCalledWith('/scores/compute', { letters: 'WORLD' })
+      expect(mockApiPost).toHaveBeenCalledWith('/scores/compute', { letters: 'WORLD' })
     })
 
     await vi.waitFor(() => {

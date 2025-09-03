@@ -1,9 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
-import api from '../lib/api'
 import { useScoringRules } from './useScoringRules'
-
-vi.mock('../lib/api')
+import { mockApiGet } from '../test/apiMocks'
 
 describe('useScoringRules', () => {
   afterEach(() => {
@@ -11,7 +9,7 @@ describe('useScoringRules', () => {
   })
 
   it('should return initial state', () => {
-    vi.mocked(api.get).mockImplementation(() => new Promise(() => {}))
+    mockApiGet.mockImplementation(() => new Promise(() => {}))
 
     const { result } = renderHook(() => useScoringRules())
 
@@ -26,7 +24,7 @@ describe('useScoringRules', () => {
       { points: 3, letters: 'DGHLM' },
       { points: 10, letters: 'QZ' },
     ]
-    vi.mocked(api.get).mockResolvedValue({ data: mockRules })
+    mockApiGet.mockResolvedValue({ data: mockRules })
 
     const { result } = renderHook(() => useScoringRules())
 
@@ -34,13 +32,13 @@ describe('useScoringRules', () => {
       expect(result.current.loading).toBe(false)
     })
 
-    expect(api.get).toHaveBeenCalledWith('/scores/rules')
+    expect(mockApiGet).toHaveBeenCalledWith('/scores/rules')
     expect(result.current.scoringRules).toEqual(mockRules)
     expect(result.current.pattern).toBe('^[AEIOUDGHLMQZaeioudghlmqz]+$')
   })
 
   it('should handle api error gracefully', async () => {
-    vi.mocked(api.get).mockRejectedValue(new Error('API Error'))
+    mockApiGet.mockRejectedValue(new Error('API Error'))
 
     const { result } = renderHook(() => useScoringRules())
 
@@ -54,7 +52,7 @@ describe('useScoringRules', () => {
 
   it('should set loading to false after successful request', async () => {
     const mockRules = [{ points: 1, letters: 'A' }]
-    vi.mocked(api.get).mockResolvedValue({ data: mockRules })
+    mockApiGet.mockResolvedValue({ data: mockRules })
 
     const { result } = renderHook(() => useScoringRules())
 
@@ -70,7 +68,7 @@ describe('useScoringRules', () => {
       { points: 1, letters: 'AB' },
       { points: 2, letters: 'CD' },
     ]
-    vi.mocked(api.get).mockResolvedValue({ data: mockRules })
+    mockApiGet.mockResolvedValue({ data: mockRules })
 
     const { result } = renderHook(() => useScoringRules())
 
@@ -80,7 +78,7 @@ describe('useScoringRules', () => {
   })
 
   it('should handle empty rules array', async () => {
-    vi.mocked(api.get).mockResolvedValue({ data: [] })
+    mockApiGet.mockResolvedValue({ data: [] })
 
     const { result } = renderHook(() => useScoringRules())
 

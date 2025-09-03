@@ -20,10 +20,22 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     coverage: {
-      reporter: ['text', 'text-summary', 'lcov', 'json-summary'],
+      reporter: [
+        'text',
+        'text-summary',
+        'lcov',
+        'json-summary'
+      ],
       reportsDirectory: '../coverage/frontend',
       include: ['src/**/*'],
-      exclude: ['src/**/*.d.ts', 'src/**/*.test.ts', 'src/**/*.test.tsx', 'src/test/**/*'],
+      exclude: [
+        'src/**/*.d.ts',
+        'src/**/*.test.ts',
+        'src/**/*.test.tsx',
+        'src/test/**/*',
+        'src/lib/axios/index.ts',
+        'src/main.tsx'
+      ],
     },
   },
 })
