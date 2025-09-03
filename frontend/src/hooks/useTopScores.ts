@@ -26,6 +26,9 @@ export const useTopScores = (isOpen: boolean) => {
       .then(response => {
         setScores(response.data)
       })
+      .catch(() => {
+        setScores([])
+      })
       .finally(() => {
         setIsLoading(false)
       })

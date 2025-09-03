@@ -27,6 +27,9 @@ export const useScoringRules = () => {
 
         setData({ rules, pattern })
       })
+      .catch(() => {
+        setData({ rules: [], pattern: '' })
+      })
       .finally(() => {
         setLoading(false)
       })
