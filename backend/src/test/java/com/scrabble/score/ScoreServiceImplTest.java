@@ -2,10 +2,18 @@ package com.scrabble.score;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.scrabble.score.dto.ScoreComputeDTO;
+import com.scrabble.score.dto.ScoreCreateDTO;
+import com.scrabble.score.dto.ScoreDTO;
+import com.scrabble.score.dto.ScoringRuleDTO;
 import com.scrabble.score.dto.TopScoreDTO;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -157,5 +165,88 @@ class ScoreServiceImplTest {
 
     // Assert
     assertTrue(result.isEmpty());
+  }
+
+  @Test
+  void getScoringRules_ShouldDelegateToScoringRulesService() {
+    // Arrange
+    List<ScoringRuleDTO> expectedRules =
+        Arrays.asList(
+            ScoringRuleDTO.builder().letters("A").points(1).build(),
+            ScoringRuleDTO.builder().letters("B").points(3).build());
+    when(scoringRulesService.getScoringRules()).thenReturn(expectedRules);
+
+    // Act
+    List<ScoringRuleDTO> result = scoreService.getScoringRules();
+
+    // Assert
+    assertEquals(expectedRules, result);
+    verify(scoringRulesService, times(1)).getScoringRules();
+  }
+
+  @Test
+  void computeScore_ShouldReturnCorrectScoreComputeDTO() {
+    // Arrange
+    String letters = "HELLO";
+    int expectedScore = 8;
+    ScoreCreateDTO request = ScoreCreateDTO.builder().letters(letters).build();
+    when(scoringRulesService.computeScore(letters)).thenReturn(expectedScore);
+
+    // Act
+    ScoreComputeDTO result = scoreService.computeScore(request);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(letters, result.getLetters());
+    assertEquals(expectedScore, result.getScore());
+    verify(scoringRulesService, times(1)).computeScore(letters);
+  }
+
+  @Test
+  void create_ShouldSaveScoreAndReturnDTO() {
+    // Arrange
+    String inputLetters = "hello";
+    String uppercaseLetters = "HELLO";
+    int computedScore = 8;
+    UUID scoreId = UUID.randomUUID();
+    LocalDateTime createdAt = LocalDateTime.now();
+
+    ScoreCreateDTO request = ScoreCreateDTO.builder().letters(inputLetters).build();
+
+    Score savedScore =
+        Score.builder()
+            .id(scoreId)
+            .letters(uppercaseLetters)
+            .points(computedScore)
+            .createdAt(createdAt)
+            .build();
+
+    when(scoringRulesService.computeScore(inputLetters)).thenReturn(computedScore);
+    when(scoreRepository.save(any(Score.class))).thenReturn(savedScore);
+
+    // Act
+    ScoreDTO result = scoreService.create(request);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(scoreId, result.getId());
+    assertEquals(uppercaseLetters, result.getLetters());
+    assertEquals(computedScore, result.getPoints());
+    assertEquals(createdAt, result.getCreatedAt());
+
+    verify(scoringRulesService, times(1)).computeScore(inputLetters);
+    verify(scoreRepository, times(1)).save(any(Score.class));
+  }
+
+  @Test
+  void deleteByIds_ShouldDelegateToRepository() {
+    // Arrange
+    List<UUID> idsToDelete = Arrays.asList(UUID.randomUUID(), UUID.randomUUID());
+
+    // Act
+    scoreService.deleteByIds(idsToDelete);
+
+    // Assert
+    verify(scoreRepository, times(1)).deleteAllById(idsToDelete);
   }
 }

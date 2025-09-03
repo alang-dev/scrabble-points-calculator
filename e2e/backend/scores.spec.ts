@@ -53,9 +53,9 @@ test.describe('Scores API', () => {
     expect(response.status()).toBe(400)
 
     const errorResponse = await response.json()
-    expect(errorResponse.message).toContain('Validation failed for object=\'scoreCreateDTO\'')
+    expect(errorResponse.message).toBe('DTO validation failed')
     expect(errorResponse.errors).toHaveLength(1)
-    expect(errorResponse.errors[0].defaultMessage).toBe('Letters field is required and cannot be empty')
+    expect(errorResponse.errors[0].message).toBe('Letters field is required and cannot be empty')
   })
 
   test('should compute score for alphanumeric string with special characters', async ({
@@ -90,9 +90,9 @@ test.describe('Scores API', () => {
     expect(response.status()).toBe(400)
 
     const errorResponse = await response.json()
-    expect(errorResponse.message).toContain('Validation failed for object=\'scoreCreateDTO\'')
+    expect(errorResponse.message).toBe('DTO validation failed')
     expect(errorResponse.errors).toHaveLength(1)
-    expect(errorResponse.errors[0].defaultMessage).toBe('Letters cannot exceed 10 characters')
+    expect(errorResponse.errors[0].message).toBe('Letters cannot exceed 10 characters')
   })
 
   test('should not create score for letters longer than 10 characters', async ({ request }) => {
@@ -105,9 +105,9 @@ test.describe('Scores API', () => {
     expect(response.status()).toBe(400)
 
     const errorResponse = await response.json()
-    expect(errorResponse.message).toContain('Validation failed for object=\'scoreCreateDTO\'')
+    expect(errorResponse.message).toBe('DTO validation failed')
     expect(errorResponse.errors).toHaveLength(1)
-    expect(errorResponse.errors[0].defaultMessage).toBe('Letters cannot exceed 10 characters')
+    expect(errorResponse.errors[0].message).toBe('Letters cannot exceed 10 characters')
   })
 
   for (const { word, expectedPoints } of SCORING_TEST_CASES) {
