@@ -47,6 +47,8 @@ jobs:
       
       # Run backend tests with coverage
       - name: Run backend tests with coverage
+        env:
+          SPRING_PROFILES_ACTIVE: ci
         run: |
           cd backend
           chmod +x gradlew
@@ -61,6 +63,8 @@ jobs:
       
       # Build both applications
       - name: Build backend JAR
+        env:
+          SPRING_PROFILES_ACTIVE: ci
         run: |
           cd backend
           ./gradlew build --parallel
