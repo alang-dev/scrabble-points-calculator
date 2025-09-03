@@ -16,6 +16,7 @@ describe('errorHandlers', () => {
     it('should set global error handler', () => {
       const handler = vi.fn()
       setGlobalErrorHandler(handler)
+
       expect(handler).toBeDefined()
     })
   })
@@ -164,6 +165,17 @@ describe('errorHandlers', () => {
       const error = new Error('Request error')
 
       await expect(interceptor.onError(error)).rejects.toBe(error)
+    })
+
+    it('should convert non-Error objects to Error instances', async () => {
+      const interceptor = createRequestInterceptor()
+      const nonErrorInput = 'string error'
+
+      await expect(interceptor.onError(nonErrorInput)).rejects.toBeInstanceOf(Error)
+      await expect(interceptor.onError(nonErrorInput)).rejects.toHaveProperty(
+        'message',
+        'string error'
+      )
     })
   })
 })

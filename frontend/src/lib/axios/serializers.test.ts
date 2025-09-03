@@ -43,13 +43,22 @@ describe('serializers', () => {
       ).toBe('valid=test')
     })
 
-    it('should handle nested objects by converting to string', () => {
+    it('should handle nested objects by converting to JSON string', () => {
       expect(
         serializeParams({
           object: { nested: 'value' },
           valid: 'test',
         })
-      ).toBe('object=%5Bobject+Object%5D&valid=test')
+      ).toBe('object=%7B%22nested%22%3A%22value%22%7D&valid=test')
+    })
+
+    it('should handle arrays with objects by converting each to JSON string', () => {
+      expect(
+        serializeParams({
+          items: [{ id: 1 }, { id: 2 }],
+          valid: 'test',
+        })
+      ).toBe('items=%7B%22id%22%3A1%7D&items=%7B%22id%22%3A2%7D&valid=test')
     })
   })
 })

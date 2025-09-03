@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useScoreCompute } from '../../hooks/useScoreCompute'
 import { useScoringRules } from '../../hooks/useScoringRules'
 import api from '../../lib/api'
@@ -52,20 +52,33 @@ export const GameBoardProvider: React.FC<GameBoardProviderProps> = ({ children }
       })
   }
 
-  const value: GameBoardContextType = {
-    originalTiles,
-    setOriginalTiles,
+  const value: GameBoardContextType = useMemo(
+    () => ({
+      originalTiles,
+      setOriginalTiles,
 
-    isScoreComputing,
-    isScoreSaving,
-    scoreValue: computedScore?.score ?? '--',
-    pattern,
-    scoringRules,
+      isScoreComputing,
+      isScoreSaving,
+      scoreValue: computedScore?.score ?? '--',
+      pattern,
+      scoringRules,
 
-    canSave,
-    handleReset,
-    handleSave,
-  }
+      canSave,
+      handleReset,
+      handleSave,
+    }),
+    [
+      originalTiles,
+      isScoreComputing,
+      isScoreSaving,
+      computedScore?.score,
+      pattern,
+      scoringRules,
+      canSave,
+      handleReset,
+      handleSave,
+    ]
+  )
 
   return <GameBoardContext.Provider value={value}>{children}</GameBoardContext.Provider>
 }

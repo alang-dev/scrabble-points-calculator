@@ -15,7 +15,8 @@ const ScoringRulesTable: React.FC<ScoringRulesTableProps> = ({ className }) => {
   const { scoringRules } = useGameBoard()
 
   const tableData = React.useMemo(() => {
-    return scoringRules.map(rule => ({
+    return scoringRules.map((rule, index) => ({
+      id: index,
       points: rule.points,
       letters: rule.letters.split('').join(', '),
     }))
@@ -27,7 +28,7 @@ const ScoringRulesTable: React.FC<ScoringRulesTableProps> = ({ className }) => {
         Scrabble Scoring Rules
       </h3>
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <DataTable columns={COLUMNS} data={tableData} />
+        <DataTable columns={COLUMNS} data={tableData} keyField="id" />
       </div>
       <p className="text-xs text-gray-500 text-center mt-2">
         Each letter has a point value. Calculate your word's total by adding up all letter values.

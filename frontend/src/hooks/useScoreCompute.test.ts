@@ -44,8 +44,11 @@ describe('useScoreCompute', () => {
   })
 
   it('should not call api when tiles are empty', () => {
-    renderHook(() => useScoreCompute(''))
+    const { result } = renderHook(() => useScoreCompute(''))
+
     expect(mockApiPost).not.toHaveBeenCalled()
+    expect(result.current.isLoading).toBe(false)
+    expect(result.current.computedScore).toBeNull()
   })
 
   it('should reset state on api error', async () => {

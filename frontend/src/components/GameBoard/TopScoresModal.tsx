@@ -24,6 +24,30 @@ const columns = [
 const TopScoresModal: React.FC<TopScoresModalProps> = ({ isOpen, onClose }) => {
   const { scores, isLoading } = useTopScores(isOpen)
 
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <span className="ml-3 text-gray-600">Loading top scores...</span>
+        </div>
+      )
+    }
+
+    if (scores.length === 0) {
+      return (
+        <div className="text-center py-8">
+          <p className="text-gray-500">No scores recorded yet.</p>
+          <p className="text-sm text-gray-400 mt-2">Be the first to save a score!</p>
+        </div>
+      )
+    }
+
+    return (
+      <DataTable columns={columns} data={scores} keyField="rank" data-testid="top-scores-table" />
+    )
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -37,19 +61,7 @@ const TopScoresModal: React.FC<TopScoresModalProps> = ({ isOpen, onClose }) => {
           Here are the highest scoring Scrabble words submitted.
         </p>
 
-        {isLoading ? (
-          <div className="flex justify-center items-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <span className="ml-3 text-gray-600">Loading top scores...</span>
-          </div>
-        ) : scores.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500">No scores recorded yet.</p>
-            <p className="text-sm text-gray-400 mt-2">Be the first to save a score!</p>
-          </div>
-        ) : (
-          <DataTable columns={columns} data={scores} data-testid="top-scores-table" />
-        )}
+        {renderContent()}
       </div>
     </Modal>
   )

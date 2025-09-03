@@ -16,9 +16,11 @@ describe('useTopScores', () => {
   })
 
   it('should not fetch scores when isOpen is false', () => {
-    renderHook(() => useTopScores(false))
+    const { result } = renderHook(() => useTopScores(false))
 
     expect(mockApiGet).not.toHaveBeenCalled()
+    expect(result.current.scores).toEqual([])
+    expect(result.current.isLoading).toBe(false)
   })
 
   it('should fetch top scores when isOpen is true', async () => {

@@ -63,5 +63,8 @@ export const createResponseInterceptor = () => ({
 
 export const createRequestInterceptor = () => ({
   onSuccess: (config: InternalAxiosRequestConfig) => config,
-  onError: (error: unknown) => Promise.reject(error),
+  onError: (error: unknown) => {
+    const errorInstance = error instanceof Error ? error : new Error(String(error))
+    return Promise.reject(errorInstance)
+  },
 })

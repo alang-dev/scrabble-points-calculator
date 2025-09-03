@@ -14,13 +14,15 @@ const mockColumns = [
 ]
 
 const mockData = [
-  { name: 'John', score: 100, date: '2023-01-01' },
-  { name: 'Jane', score: 200, date: '2023-01-02' },
+  { id: 1, name: 'John', score: 100, date: '2023-01-01' },
+  { id: 2, name: 'Jane', score: 200, date: '2023-01-02' },
 ]
 
 describe('DataTable', () => {
   it('should render table with data', () => {
-    render(<DataTable columns={mockColumns} data={mockData} data-testid="data-table" />)
+    render(
+      <DataTable columns={mockColumns} data={mockData} keyField="id" data-testid="data-table" />
+    )
 
     expect(screen.getByTestId('data-table')).toBeInTheDocument()
     expect(screen.getByText('Name')).toBeInTheDocument()
@@ -33,13 +35,13 @@ describe('DataTable', () => {
   })
 
   it('should render empty state when no data', () => {
-    render(<DataTable columns={mockColumns} data={[]} />)
+    render(<DataTable columns={mockColumns} data={[]} keyField="id" />)
 
     expect(screen.getByText('No data available')).toBeInTheDocument()
   })
 
   it('should render custom cell content with render function', () => {
-    render(<DataTable columns={mockColumns} data={mockData} />)
+    render(<DataTable columns={mockColumns} data={mockData} keyField="id" />)
 
     expect(screen.getByText('1/1/2023')).toBeInTheDocument()
     expect(screen.getByText('1/2/2023')).toBeInTheDocument()

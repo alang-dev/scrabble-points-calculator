@@ -19,6 +19,7 @@ interface Column {
 interface DataTableProps {
   columns: Column[]
   data: Record<string, unknown>[]
+  keyField: string
   className?: string
   'data-testid'?: string
 }
@@ -26,9 +27,26 @@ interface DataTableProps {
 const DataTable: React.FC<DataTableProps> = ({
   columns,
   data,
+  keyField,
   className,
   'data-testid': dataTestId,
 }) => {
+  const renderCellValue = (column: Column, value: unknown): React.ReactNode => {
+    if (column.render) {
+      return column.render(value)
+    }
+
+    if (value == null) {
+      return ''
+    }
+
+    if (typeof value === 'object') {
+      return '[Object]'
+    }
+
+    return String(value)
+  }
+
   return (
     <Table className={className} data-testid={dataTestId}>
       <TableHeader>
@@ -41,11 +59,11 @@ const DataTable: React.FC<DataTableProps> = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((row, index) => (
-          <TableRow key={index}>
+        {data.map(row => (
+          <TableRow key={String(row[keyField])}>
             {columns.map(column => (
               <TableCell key={column.key} align={column.align}>
-                {column.render ? column.render(row[column.key]) : String(row[column.key] ?? '')}
+                {renderCellValue(column, row[column.key])}
               </TableCell>
             ))}
           </TableRow>
