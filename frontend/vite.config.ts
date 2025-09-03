@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -23,7 +23,7 @@ export default defineConfig({
       reporter: ['text', 'text-summary', 'lcov', 'json-summary'],
       reportsDirectory: '../coverage/frontend',
       include: ['src/**/*'],
-      exclude: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'src/test/**/*'],
+      exclude: ['src/**/*.d.ts', 'src/**/*.test.ts', 'src/**/*.test.tsx', 'src/test/**/*'],
     },
   },
 })
