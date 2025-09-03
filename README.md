@@ -25,15 +25,26 @@ cp .env.example .env
 
 ## Testing
 
-**E2E tests with UI**:
-```bash
-cd e2e && npm run test:ui
-```
+### Unit Tests
+
+**View test coverage reports**:
+- **Online**: View the latest unit test coverage reports at [https://alang-dev.github.io/scrabble-points-calculator/](https://alang-dev.github.io/scrabble-points-calculator/)
+
+### E2E Tests
 
 **Headless E2E** (for CI/automation):
 ```bash
 cd e2e && npm test
 ```
+
+**E2E tests with UI**:
+```bash
+cd e2e && npm run test:ui
+```
+
+**View E2E test results** (locally):
+- After running E2E tests, open `e2e/playwright-report/index.html` in your browser
+- Or run `cd e2e && npx playwright show-report` to launch the report viewer
 
 ## Documentation
 
