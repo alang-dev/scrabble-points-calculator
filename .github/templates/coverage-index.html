@@ -8,9 +8,10 @@
   <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
   <link href="./assets/css/coverage-reports.css" rel="stylesheet">
   <script src="./assets/js/bootstrap.bundle.min.js"></script>
-  <script src="./assets/js/chart.min.js"></script>
   <script src="./assets/js/papaparse.min.js"></script>
   <script src="./assets/js/coverage-reports.js"></script>
+  <script src="./assets/js/backend-coverage.js"></script>
+  <script src="./assets/js/frontend-coverage.js"></script>
 </head>
 
 <body class="py-4">
@@ -38,10 +39,7 @@
                 <div id="backend-loading" class="text-center text-muted py-4">Loading backend coverage data...</div>
                 <div id="backend-error" class="text-center text-danger py-4 d-none"></div>
                 <div id="backend-content" class="d-none">
-                  <div class="chart-container">
-                    <canvas id="backendChart"></canvas>
-                  </div>
-                  <div class="table-responsive mt-3">
+                  <div class="table-responsive">
                     <table id="backendTable" class="table table-sm table-striped">
                       <thead class="table-light">
                         <tr>
@@ -76,10 +74,7 @@
                 <div id="frontend-loading" class="text-center text-muted py-4">Loading frontend coverage data...</div>
                 <div id="frontend-error" class="text-center text-danger py-4 d-none"></div>
                 <div id="frontend-content" class="d-none">
-                  <div class="chart-container">
-                    <canvas id="frontendChart"></canvas>
-                  </div>
-                  <div class="table-responsive mt-3">
+                  <div class="table-responsive">
                     <table id="frontendTable" class="table table-sm table-striped">
                       <thead class="table-light">
                         <tr>
@@ -99,7 +94,7 @@
 
 
           <div class="text-center mt-5 pt-4 border-top">
-            <small class="text-muted">Generated automatically by GitHub Actions</script></small>
+            <small class="text-muted">Generated automatically by GitHub Actions</small>
           </div>
         </div>
       </div>

@@ -23,9 +23,10 @@ export default defineConfig({
       reporter: [
         'text',
         'text-summary',
-        'lcov',
-        'json-summary'
+        'json-summary',
       ],
+      reportOnFailure: true,
+      skipFull: true,
       reportsDirectory: '../coverage/frontend',
       include: ['src/**/*'],
       exclude: [
