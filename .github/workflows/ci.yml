@@ -61,14 +61,31 @@ jobs:
           cd frontend
           npm run test:coverage
       
-      # Build both applications
-      - name: Build backend JAR
+      # Cache SonarQube packages
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      
+      # Build and analyze backend
+      - name: Build and analyze backend
         env:
-          SPRING_PROFILES_ACTIVE: ci
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd backend
-          ./gradlew build --parallel
+          ./gradlew build sonar --info
       
+      # SonarQube scan for frontend
+      - name: SonarQube Scan for frontend
+        uses: SonarSource/sonarqube-scan-action@v5
+        with:
+          projectBaseDir: frontend
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      
+      # Build frontend dist
       - name: Build frontend dist
         run: |
           cd frontend

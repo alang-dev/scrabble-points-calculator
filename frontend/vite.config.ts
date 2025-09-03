@@ -24,6 +24,7 @@ export default defineConfig({
         'text',
         'text-summary',
         'json-summary',
+        'lcov',
       ],
       reportOnFailure: true,
       skipFull: true,
