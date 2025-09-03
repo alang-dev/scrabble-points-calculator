@@ -1,5 +1,9 @@
 # Scrabble Points Calculator
 
+**Frontend**: [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=spc-frontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=spc-frontend)
+
+**Backend**: [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=spc-backend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=spc-backend)
+
 ## Prerequisites
 
 Before starting, ensure you have the required development environment installed. See [docs/architecture/technology-stack.md](docs/architecture/technology-stack.md) for the complete list of required tools and versions.

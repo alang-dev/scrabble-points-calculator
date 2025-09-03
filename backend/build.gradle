@@ -88,7 +88,8 @@ jacocoTestReport {
         xml.outputLocation = file("../coverage/backend/jacocoTestReport.xml")
         csv.required = true
         csv.outputLocation = file("../coverage/backend/jacocoTestReport.csv")
-        html.required = false
+        html.required = true
+        html.outputLocation = file("../coverage/backend/html")
     }
 }
 
@@ -127,7 +128,12 @@ task format {
 sonar {
     properties {
         property "sonar.projectKey", "spc-backend"
+        property "sonar.projectName", "spc-backend"
         property "sonar.organization", "alang-dev"
+        property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.coverage.jacoco.xmlReportPaths", "../coverage/backend/jacocoTestReport.xml"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.exclusions", "**/config/**,**/dto/**,**/entity/**"
+        property "sonar.cpd.exclusions", "**/dto/**,**/entity/**"
     }
 }
