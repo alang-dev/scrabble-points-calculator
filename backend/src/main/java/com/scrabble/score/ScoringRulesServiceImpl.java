@@ -4,10 +4,12 @@ import com.scrabble.score.dto.ScoringRuleDTO;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class ScoringRulesServiceImpl implements ScoringRulesService {
 
   private static final List<ScoringRuleDTO> SCORING_RULES =
@@ -34,15 +36,23 @@ public class ScoringRulesServiceImpl implements ScoringRulesService {
 
   @Override
   public int computeScore(String letters) {
+    log.info("Computing score for input letters: '{}'", letters);
+
     if (StringUtils.isBlank(letters)) {
+      log.info("Input letters is blank/null, returning score: 0");
       return 0;
     }
 
-    return letters
-        .toUpperCase()
-        .chars()
-        .mapToObj(c -> (char) c)
-        .mapToInt(c -> LETTER_SCORES.getOrDefault(c, 0))
-        .sum();
+    var totalScore =
+        letters
+            .toUpperCase()
+            .chars()
+            .mapToObj(c -> (char) c)
+            .mapToInt(c -> LETTER_SCORES.getOrDefault(c, 0))
+            .sum();
+
+    log.info("Computed score {} for letters: '{}'", totalScore, letters);
+
+    return totalScore;
   }
 }

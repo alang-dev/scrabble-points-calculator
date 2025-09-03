@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<ErrorResponseDTO> handleIllegalArgument(IllegalArgumentException ex) {
     return badRequest(ex.getMessage());
