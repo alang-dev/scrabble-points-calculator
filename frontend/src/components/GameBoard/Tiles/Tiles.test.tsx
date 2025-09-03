@@ -10,7 +10,21 @@ vi.mock('./TilesHeader', () => ({
 }))
 
 vi.mock('./TilesInput', () => ({
-  default: ({ value, onChange, maxLength, autoCapitalize, autoFocus, pattern }: any) => (
+  default: ({
+    value,
+    onChange,
+    maxLength,
+    autoCapitalize,
+    autoFocus,
+    pattern,
+  }: {
+    value: string
+    onChange: (value: string) => void
+    maxLength: number
+    autoCapitalize: string
+    autoFocus: boolean
+    pattern: string
+  }) => (
     <input
       data-testid="tiles-input"
       value={value}
